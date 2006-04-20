@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>H3T</title>
+</head>
+<body>
+<span style="font-weight: bold;"><big><big><big><big>H3T</big></big></big></big><br>
+<br>
+</span>
+<div style="text-align: right;"><span style="font-weight: bold;"><span style="font-weight: bold;"></span></span><a href="http://sourceforge.net/projects/h3t">Get H3T</a> | <a href="http://h3t.sourceforge.net/api/">API doc</a><br>
+<br>
+<div style="text-align: left;"><span style="font-weight: bold;">What problem does H3T solve?</span><br>
+If you use Hibernate&nbsp; in a server and&nbsp;are returning entities
+to a client in a different process, this framework may be for you.
+Hibernate allows associated collections and single entities to be
+marked as <span style="font-family: monospace;">LAZY</span> (it's the
+default for associated collections). When you attempt to access an
+unitialized lazy element, Hibernate will use the session associated
+with the entity to load it for you under the covers. If you attempt to
+access an unitialized lazy element in your client, then you will see an
+exception because your entity is no longer associated with a session.
+Nor can it be.<br>
+H3T will intercept your attempts to access unitialized lazy elements
+and load them from the server for you. This will happen as seamlessly
+as if it were being done by Hibernate on the server.<br>
+<br>
+<span style="font-weight: bold;">Can I use it?</span> <br>
+H3T hooks into EJB3 entity annotations (e.g., ManyToOne) to intercept
+your attempts to access associated elements. For this reason, you need
+to be using Hibernate 3.0 or above and be using EJB3 annotations. You
+do <span style="font-style: italic;">not</span> need to be using EJB3
+entity beans, just the annotations. Nor do you need to be using JBoss
+Application Server, or any J2EE container for that matter.<br>
+<br>
+<span style="font-weight: bold;">What are H3T's dependencies?</span><br>
+<a href="http://www.jboss.org/products/aop">JBoss AOP</a> (tested with 1.3.4), <a href="http://cglib.sourceforge.net/">cglib</a> (tested with 2.1.2), and Hibernate (with annotations).<br>
+<br>
+<span style="font-weight: bold;">Isn't&nbsp;transparent remote lazy loading dangerous and evil?</span><br>
+Possibly. This topic even has its own entry in the <a href="http://www.hibernate.org/117.html#A36">Hibernate Users FAQ</a>. It's also discussed in the Hibernate forum and mentioned in <a href="http://www.manning.com/books/bauer"><span style="font-style: italic;">Hibernate In Action</span></a>. You should be familiar with the pitfalls of following such a strategy before using H3T.<br>
+<br>
+<span style="font-weight: bold;">Does H3T hook into </span><span style="font-style: italic; font-weight: bold;">all</span><span style="font-weight: bold;"> lazy associations?</span><br>
+No. You have to annotate the associations with&nbsp;<span style="font-family: monospace;">org.h3t.RemoteLoad</span>. Sometimes you <span style="font-style: italic;">want</span>
+to see&nbsp;LazyInitializationExceptions&nbsp; in your client because
+they are highlighting coding errors (e.g., an association should have
+been marked <span style="font-family: monospace;">EAGER</span>). If
+H3T were to handle all lazy associations for you then you would never,
+ever see these exceptions and may miss coding errors.<br>
+<br>
+<span style="font-weight: bold;">How does H3T know how to get stuff from my server when it needs to initialize lazy associations?</span><br>
+When you mark an association with the <span style="font-family: monospace;">org.h3t.RemoteLoad </span>annotation, you can specify an optional <span style="font-family: monospace;">factory </span>parameter. Set it to the class of a custom implementation of<span style="font-family: monospace;"></span>&nbsp;the <span style="font-family: monospace;">org.h3t.LoadServiceFactory </span>interface. Your implementation should return a reference to an <span style="font-family: monospace;">org.h3t.LoadService</span> implementation. <br>
+The <span style="font-family: monospace;">LoadService</span> interface
+has methods for loading lazy elements. Normally your implementation (or
+the implementation that sits on the server, at least) will simply pass
+through the call to corresponding helper methods in <span style="font-family: monospace;">org.h3t.Loader</span>.
+Note that H3T doesn't care how your implementation of LoadService makes
+requests to the server. It could be an RMI stub, your own
+implementation that generates HTTP requests --&nbsp;anything.<br>
+If you don't set the <span style="font-family: monospace;">factory</span> parameter, then H3T will fall back on its default behavior. To acquire a reference to a <span style="font-family: monospace;">LoadService</span>, it will create an InitialContext and look up an object named "<span style="font-family: monospace;">org.h3t.LoadService</span>". The H3T distribution includes, in its own zip archive, <span style="font-family: monospace;">org.h3t.ejb.LoadServiceBean</span>. This is an EJB3 stateless session bean. If you deploy it in your EJB app and provide the client with an appropriate <span style="font-family: monospace;">jndi.properties</span>, H3T will work out of the box.<br>
+<br>
+<span style="font-weight: bold;">Do I have to do anything special when I run my client?</span><br>
+Yes. You need these VM arguments:<br>
+<span style="font-family: monospace;">-Djboss.aop.path=<span style="font-weight: bold;">[jboss-aop.xml]</span>&nbsp; </span><br style="font-family: monospace;">
+<span style="font-family: monospace;">-javaagent:<span style="font-weight: bold;">[location of JBoss AOP jars]</span>/jboss-aop-jdk50.jar</span><br>
+<br>
+<span style="font-family: monospace;">jboss.aop.path</span>&nbsp;should point to wherever you place the jboss-aop-xml file that ships with H3T.<br>
+&nbsp;<br>
+<span style="font-weight: bold;">Is there an example?</span><br>
+Yes. Download the source archive and run the "<span style="font-family: monospace;">runExample</span>"
+ant target. It builds and deploys an EAR and then runs a very simple
+client application, which pulls back entities from the server. When the
+client attempts to access unitialized lazy associations, H3T kicks in.<br>
+To run this application, you'll need JBoss Application Server. If you
+don't have 4.0.3SP1, you'll need to grab your Hibernate/EJB3 jars from
+JBoss and drop them into the appropriate H3T lib directories. The jars
+on the client and server need to match.<br>
+You'll also need to modify the properties in <span style="font-family: monospace;">build.properties</span> to point to your JBoss installation.</div>
+<span style="font-weight: bold;"></span></div>
+</body>
+</html>
