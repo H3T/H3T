@@ -1,10 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
-  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
-  <title>H3T</title>
-</head>
-<body>
+<html><head>
+
+
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>H3T</title></head><body>
 <span style="font-weight: bold;"><big><big><big><big>H3T</big></big></big></big><br>
 <br>
 </span>
@@ -16,12 +14,12 @@ to a client in a different process, this framework may be for you.
 Hibernate allows associated collections and single entities to be
 marked as <span style="font-family: monospace;">LAZY</span> (it's the
 default for associated collections). When you attempt to access an
-unitialized lazy element, Hibernate will use the session associated
+uninitialized lazy element, Hibernate will use the session associated
 with the entity to load it for you under the covers. If you attempt to
-access an unitialized lazy element in your client, then you will see an
+access an uninitialized lazy element in your client, then you will see an
 exception because your entity is no longer associated with a session.
 Nor can it be.<br>
-H3T will intercept your attempts to access unitialized lazy elements
+H3T will intercept your attempts to access uninitialized lazy elements
 and load them from the server for you. This will happen as seamlessly
 as if it were being done by Hibernate on the server.<br>
 <br>
@@ -69,12 +67,12 @@ Yes. You need these VM arguments:<br>
 Yes. Download the source archive and run the "<span style="font-family: monospace;">runExample</span>"
 ant target. It builds and deploys an EAR and then runs a very simple
 client application, which pulls back entities from the server. When the
-client attempts to access unitialized lazy associations, H3T kicks in.<br>
+client attempts to access uninitialized lazy associations, H3T kicks in.<br>
 To run this application, you'll need JBoss Application Server. If you
 don't have 4.0.3SP1, you'll need to grab your Hibernate/EJB3 jars from
 JBoss and drop them into the appropriate H3T lib directories. The jars
 on the client and server need to match.<br>
 You'll also need to modify the properties in <span style="font-family: monospace;">build.properties</span> to point to your JBoss installation.</div>
 <span style="font-weight: bold;"></span></div>
-</body>
-</html>
+
+</body></html>
