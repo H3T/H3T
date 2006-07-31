@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -16,14 +16,15 @@ import javax.persistence.Version;
 
 import org.h3t.RemoteLoad;
 
-@Entity(access=AccessType.FIELD)
+@Entity
 @Table(name = "Orders")
 @SuppressWarnings( { "unused" })
 public class Order implements Serializable {
 
 	private static final long serialVersionUID = -5333281223601855258L;
 
-	@Id	(generate=GeneratorType.AUTO)
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
 	@ManyToOne(optional = false)

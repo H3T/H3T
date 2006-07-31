@@ -2,18 +2,19 @@ package org.h3t.test.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.AccessType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity(access=AccessType.FIELD)
+@Entity
 @SuppressWarnings("unused")
 public class RelatedEntity implements Serializable {
 
 	private static final long serialVersionUID = 6740944970089887263L;
-	
-	@Id(generate=GeneratorType.AUTO)
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
 	private String s;

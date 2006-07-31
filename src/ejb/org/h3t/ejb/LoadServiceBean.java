@@ -12,7 +12,7 @@ import org.h3t.util.SerializableField;
 import org.h3t.util.SerializableMethod;
 import org.hibernate.Session;
 
-@Stateless
+@Stateless(name="H3T_LoadService")
 @Remote(LoadService.class)
 public class LoadServiceBean implements LoadService {
 

@@ -3,10 +3,10 @@ package org.h3t.test.entity;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -16,7 +16,7 @@ import javax.persistence.OneToOne;
 import org.h3t.RemoteLoad;
 import org.h3t.test.util.TestLoadServiceFactory;
 
-@Entity(access = AccessType.PROPERTY)
+@Entity
 @SuppressWarnings("unused")
 public class MethodAccessEntity {
 
@@ -38,7 +38,8 @@ public class MethodAccessEntity {
 
 	private List<RelatedEntity> manyToManyEager = new LinkedList<RelatedEntity>();;
 
-	@Id(generate = GeneratorType.AUTO)
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Integer getId() {
 		return id;
 	}
@@ -48,7 +49,7 @@ public class MethodAccessEntity {
 	}
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@RemoteLoad(factory=TestLoadServiceFactory.class)
+	@RemoteLoad(factory = TestLoadServiceFactory.class)
 	public RelatedEntity getOneToOneLazy() {
 		return oneToOneLazy;
 	}
@@ -58,7 +59,7 @@ public class MethodAccessEntity {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@RemoteLoad(factory=TestLoadServiceFactory.class)
+	@RemoteLoad(factory = TestLoadServiceFactory.class)
 	public RelatedEntity getManyToOneLazy() {
 		return manyToOneLazy;
 	}
@@ -68,7 +69,7 @@ public class MethodAccessEntity {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY)
-	@RemoteLoad(factory=TestLoadServiceFactory.class)
+	@RemoteLoad(factory = TestLoadServiceFactory.class)
 	public List<RelatedEntity> getOneToManyLazy() {
 		return oneToManyLazy;
 	}
@@ -78,7 +79,7 @@ public class MethodAccessEntity {
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY)
-	@RemoteLoad(factory=TestLoadServiceFactory.class)
+	@RemoteLoad(factory = TestLoadServiceFactory.class)
 	public List<RelatedEntity> getManyToManyLazy() {
 		return manyToManyLazy;
 	}
@@ -88,7 +89,7 @@ public class MethodAccessEntity {
 	}
 
 	@OneToOne(fetch = FetchType.EAGER)
-	@RemoteLoad(factory=TestLoadServiceFactory.class)
+	@RemoteLoad(factory = TestLoadServiceFactory.class)
 	public RelatedEntity getOneToOneEager() {
 		return oneToOneEager;
 	}
@@ -98,7 +99,7 @@ public class MethodAccessEntity {
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@RemoteLoad(factory=TestLoadServiceFactory.class)
+	@RemoteLoad(factory = TestLoadServiceFactory.class)
 	public RelatedEntity getManyToOneEager() {
 		return manyToOneEager;
 	}
@@ -108,7 +109,7 @@ public class MethodAccessEntity {
 	}
 
 	@OneToMany(fetch = FetchType.EAGER)
-	@RemoteLoad(factory=TestLoadServiceFactory.class)
+	@RemoteLoad(factory = TestLoadServiceFactory.class)
 	public List<RelatedEntity> getOneToManyEager() {
 		return oneToManyEager;
 	}
@@ -118,7 +119,7 @@ public class MethodAccessEntity {
 	}
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@RemoteLoad(factory=TestLoadServiceFactory.class)
+	@RemoteLoad(factory = TestLoadServiceFactory.class)
 	public List<RelatedEntity> getManyToManyEager() {
 		return manyToManyEager;
 	}

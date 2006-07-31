@@ -19,11 +19,10 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		Context ctx = new InitialContext();
 		CustomerService cust_svc = (CustomerService) ctx
-				.lookup(CustomerService.class.getName());
-		OrderService ord_svc = (OrderService) ctx.lookup(OrderService.class
-				.getName());
+				.lookup("ejb/H3T/CustomerService");
+		OrderService ord_svc = (OrderService) ctx.lookup("ejb/H3T/OrderService");
 		ProductService prod_svc = (ProductService) ctx
-				.lookup(ProductService.class.getName());
+				.lookup("ejb/H3T/ProductService");
 
 		Customer bob = cust_svc.createCustomer("Bob");
 		Order order = ord_svc.createOrder(bob);

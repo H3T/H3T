@@ -1,5 +1,5 @@
 
-ehcache-1.1.jar (1.1)
+ehcache-1.2.jar (1.2)
 - EHCache cache
 - runtime, optional (required if no other cache provider is set)
 
@@ -15,7 +15,7 @@ jboss-cache.jar (1.2.2 alpha)
 - TreeCache clustered cache
 - runtime, optional
 
-jgroups-2.2.7.jar (2.2.7)
+jgroups-2.2.8.jar (2.2.8)
 - JGroups multicast library
 - runtime, optional (required by replicated caches)
 
@@ -23,13 +23,13 @@ jta.jar (unknown)
 - Standard JTA API
 - runtime, required for standalone operation (outside application server)
 
-xml-apis.jar (unknown)
-- Standard JAXP API
-- runtime, some SAX parser is required
-
 commons-logging-1.0.4.jar (1.0.4)
 - Commons Logging
 - runtime, required
+
+xml-apis.jar (unknown)
+- Standard JAXP API
+- runtime, some SAX parser is required
 
 c3p0-0.9.0.jar (0.9.0)
 - C3P0 JDBC connection pool
@@ -45,7 +45,7 @@ jboss-system.jar (unknown)
 
 asm-attrs.jar (unknown)
 - ASM bytecode library
-- runtime, required
+- runtime, required if using 'cglib' bytecode provider
 
 jacc-1_0-fr.jar (1.0-fr)
 - JACC Library
@@ -63,17 +63,21 @@ junit-3.8.1.jar (3.8.1)
 - JUnit test framework
 - buildtime
 
+javassist.jar (3.1)
+- Javassist bytecode generator
+- runtime, required if using 'javassist' bytecode provider
+
 dom4j-1.6.1.jar (1.6.1)
 - XML configuration & mapping parser
 - runtime, required
 
-antlr-2.7.5H3.jar (2.7.5H3)
-- ANother Tool for Language Recognition (patched with proper context classloading)
+antlr-2.7.6.jar (2.7.6)
+- ANother Tool for Language Recognition
 - runtime, required
 
-cglib-2.1.2.jar (2.1.2)
+cglib-2.1.3.jar (2.1.3)
 - CGLIB bytecode generator
-- runtime, required
+- runtime, required if using 'cglib' bytecode provider
 
 jboss-common.jar (unknown)
 - unknown name
@@ -85,7 +89,7 @@ oscache-2.1.jar (2.1)
 
 asm.jar (unknown)
 - ASM bytecode library
-- runtime, required
+- runtime, required if using 'cglib' bytecode provider
 
 ant-launcher-1.6.5.jar (1.6.5)
 - Ant launcher
@@ -142,3 +146,7 @@ proxool-0.8.3.jar (0.8.3)
 concurrent-1.3.2.jar (1.3.2)
 - unknown name
 - runtime, optional (required by TreeCache)
+
+syndiag2.jar (2.0)
+- antlr to bnf image generator
+- buildtime

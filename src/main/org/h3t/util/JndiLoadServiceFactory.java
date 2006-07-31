@@ -13,7 +13,7 @@ public class JndiLoadServiceFactory implements LoadServiceFactory {
 	public LoadService lookup() throws H3TException {
 		try {
 			Context ctx = new InitialContext();
-			return (LoadService)ctx.lookup(LoadService.class.getName());
+			return (LoadService)ctx.lookup("ejb/H3T/LoadService");
 		} catch (NamingException e) {
 			throw new H3TException(e);
 		}

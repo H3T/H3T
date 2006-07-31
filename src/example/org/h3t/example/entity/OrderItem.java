@@ -2,23 +2,24 @@ package org.h3t.example.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import org.h3t.RemoteLoad;
 
-@Entity(access=AccessType.FIELD)
+@Entity
 @SuppressWarnings({"unused"})
 public class OrderItem implements Serializable{
 
 	private static final long serialVersionUID = 6781802278020330507L;
 
-	@Id	(generate=GeneratorType.AUTO)
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)

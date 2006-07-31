@@ -1,19 +1,23 @@
 package org.h3t.test.entity;
 
-import javax.persistence.AccessType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-@Entity(access=AccessType.FIELD)
+@Entity
 @SuppressWarnings("unused")
 public class B {
-	@Id(generate=GeneratorType.AUTO)
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
+
 	private String s;
+
 	@ManyToOne
 	private A a;
+
 	@ManyToOne
 	private C c;
 
@@ -23,8 +27,8 @@ public class B {
 
 	protected B() {
 	}
-	
-	public Integer getId(){
+
+	public Integer getId() {
 		return id;
 	}
 
