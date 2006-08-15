@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project default="dist" name="h3t">
+    <property file="${basedir}/build.properties"/>
+	<property name="build" value="${basedir}/build"/>
+	<property name="main.classes" value="${build}/main.classes"/>
+	<property name="ejb.classes" value="${build}/ejb.classes"/>
+	<property name="test.classes" value="${build}/test.classes"/>
+	<property name="example.classes" value="${build}/example.classes"/>
+	<property name="main.src" value="${basedir}/src/main"/>
+	<property name="ejb.src" value="${basedir}/src/ejb"/>
+	<property name="test.src" value="${basedir}/src/test"/>
+	<property name="example.src" value="${basedir}/src/example"/>
+	<property name="dist" value="${build}/dist"/>
+	<property name="doc" value="${build}/doc"/>
+	<property name="jboss.aop.lib" value="${basedir}/lib/jboss-aop"/>
+	<property name="hibernate.lib" value="${basedir}/lib/hibernate"/>
+	<property name="hsql.lib" value="${basedir}/lib/hsql"/>
+	<property name="ejb3.lib" value="${basedir}/lib/ejb3"/>
+	<property name="etc.dir" value="${basedir}/src/etc"/>
+	<property name="version" value="0.3.0"/>
+	
+    <path id="classpath">
+        <fileset dir="${ejb3.lib}">
+            <include name="*.jar"/>
+        </fileset>
+         <fileset dir="${jboss.aop.lib}">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${hibernate.lib}">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${hsql.lib}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>	
+	
+	<target name="prepare">
+		<mkdir dir="${build}"/>
+		<mkdir dir="${main.classes}"/>
+		<mkdir dir="${ejb.classes}"/>
+		<mkdir dir="${test.classes}"/>
+		<mkdir dir="${example.classes}"/>
+		<mkdir dir="${dist}"/>
+	</target>
+	
+	<target name="clean">
+		<delete dir="${main.classes}"/>
+		<delete dir="${ejb.classes}"/>
+		<delete dir="${test.classes}"/>
+		<delete dir="${example.classes}"/>
+		<delete dir="${dist}"/>
+		<delete dir="${doc}"/>
+		<delete dir="${build}"/>
+	</target>
+	
+	<target name="maincompile" depends="prepare">
+		<javac destdir="${main.classes}" srcdir="${main.src}" classpathref="classpath"/>
+	</target>
+
+	<target name="ejbcompile" depends="maincompile">
+		<javac destdir="${ejb.classes}" srcdir="${ejb.src}" classpathref="classpath" classpath="${main.classes}"/>
+	</target>
+	
+	<target name="testcompile" depends="maincompile">
+		<javac destdir="${test.classes}" srcdir="${test.src}" classpathref="classpath" classpath="${main.classes}"/>
+	</target>
+	
+	<target name="examplecompile" depends="ejbcompile">
+		<javac destdir="${example.classes}" srcdir="${example.src}" classpathref="classpath" classpath="${main.classes}"/>
+	</target>
+
+	<target name="compile" depends="maincompile,ejbcompile">
+	</target>
+	
+   <target name="javadoc" depends="prepare">
+		<mkdir dir="${doc}"/>
+		<javadoc sourcepath="${main.src}:${ejb.src}" destdir="${doc}" packagenames="org.h3t*" Author="true"
+             Doctitle="H3T API Documentation" Use="true" Version="true" 
+             Windowtitle="H3T API" Private="false" classpathref="classpath">
+      <tag name="todo" description="To do:"/>
+      <tag name="created" description="Created:"/>
+    </javadoc>
+  </target>
+	
+	<target name="dist" depends="javadoc, compile">
+		<jar basedir="${main.classes}"
+			jarfile="${build}/${ant.project.name}-${version}.jar">
+			<manifest>
+				<attribute name="Implementation-Title" value="H3T Framework"/>
+				<attribute name="Implementation-Version" value="${version}"/>
+				<attribute name="Implementation-URL" value="http://h3t.sourceforge.net"/>
+			</manifest>
+		</jar>
+		
+		<zip basedir="${ejb.classes}"
+			zipfile="${build}/${ant.project.name}-${version}-bean.zip">
+		</zip>
+		
+		<zip zipfile="${dist}/${ant.project.name}-${version}-dist.zip">
+			<fileset dir="${build}" includes="*.jar,*.zip,doc/**"/>
+			<fileset file="${basedir}/*.html"/>
+		</zip>
+	</target>
+	
+	<target name="test" depends="testcompile">
+		<java classname = "org.h3t.test.AllTests" 
+			classpath="${test.classes}:${main.classes}:${etc.dir}" 
+			classpathref="classpath" fork="true" failonerror="true"/>
+	</target>
+	
+	<target name="build-exampleear" depends="examplecompile,dist">
+		<jar jarfile="${build}/${ant.project.name}-${version}-example.jar">
+			<fileset dir="${example.classes}"/>
+			<fileset dir="${ejb.classes}"/>
+			<manifest>
+				<attribute name="Class-Path" value="${ant.project.name}-${version}.jar"/>
+			</manifest>
+			<metainf file="${etc.dir}/persistence.xml"/>
+			<metainf file="${etc.dir}/jboss.xml"/>
+		</jar>
+		
+		<replace file="${etc.dir}/application.xml" token="@h3t.ejb3@" value="${ant.project.name}-${version}-example.jar"/>
+
+		<ear earfile="${jboss.deploy}/${ant.project.name}-${version}-example.ear" appxml="${etc.dir}/application.xml">
+			<fileset dir="${build}" includes="*.jar,*.ejb3"/>
+		</ear>
+	</target>
+	
+	<target name="touchEar">
+		<touch file="${jboss.deploy}/${ant.project.name}-${version}-example.ear"/>
+	</target>
+	
+	<target name="runExample" depends="build-exampleear">
+		<java classname = "org.h3t.example.client.Main" 
+			classpath="${example.classes}:${build}/${ant.project.name}-${version}.jar:${etc.dir}" 
+			classpathref="classpath" fork="true" failonerror="true">
+           <sysproperty key="jboss.aop.path" value="jboss-aop.xml"/>
+ 			<jvmarg value="-javaagent:${jboss.aop.lib}/jboss-aop-jdk50.jar"/>
+			<classpath>
+				<fileset dir="${jboss.client}"/>
+				<fileset dir="${jboss.deploy}/ejb3.deployer"/>
+			</classpath>
+		</java>		
+	</target>
+	
+
+</project>
