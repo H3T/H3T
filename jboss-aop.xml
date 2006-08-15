@@ -8,9 +8,6 @@
            scope="PER_VM"/>
    <aspect class="org.h3t.aspect.OneToOneAspect"
            scope="PER_VM"/>
-   <aspect class="org.jboss.aop.reflection.ReflectionAspect" 
-		   scope="PER_VM"/>
-
            
    <bind pointcut="get(* *->@javax.persistence.OneToMany) AND get(* *->@org.h3t.RemoteLoad)">
        <advice name="proxyField" aspect="org.h3t.aspect.OneToManyAspect"/>
@@ -35,31 +32,6 @@
    </bind>   
    <bind pointcut="execution(* *->@javax.persistence.OneToOne()) AND execution(* *->@org.h3t.RemoteLoad())">
 		<advice name="invoke" aspect="org.h3t.aspect.OneToOneAspect"/>
-   </bind> 
-   <bind pointcut="call(* java.lang.Class->newInstance())">
-      <advice name="interceptNewInstance" 
-         aspect="org.jboss.aop.reflection.ReflectionAspect"/>
    </bind>
-
-   <bind pointcut="call(* java.lang.reflect.Constructor->newInstance(java.lang.Object[]))">
-      <advice name="interceptNewInstance" 
-         aspect="org.jboss.aop.reflection.ReflectionAspect"/>
-   </bind>
-
-   <bind pointcut="call(* java.lang.reflect.Method->invoke(java.lang.Object, java.lang.Object[]))">
-      <advice name="interceptMethodInvoke" 
-         aspect="org.jboss.aop.reflection.ReflectionAspect"/>
-   </bind>
-
-   <bind pointcut="call(* java.lang.reflect.Field->get*(..))">
-      <advice name="interceptFieldGet" 
-         aspect="org.jboss.aop.reflection.ReflectionAspect"/>
-   </bind>
-
-   <bind pointcut="call(* java.lang.reflect.Field->set*(..))">
-      <advice name="interceptFieldSet" 
-         aspect="org.jboss.aop.reflection.ReflectionAspect"/>
-   </bind>   
-
-
+ 
 </aop>
