@@ -1,0 +1,20 @@
+<jboss>
+   <enterprise-beans>
+      <session>
+         <ejb-name>H3T_LoadService</ejb-name>
+         <jndi-name>ejb/H3T/LoadService</jndi-name>
+      </session>
+      <session>
+         <ejb-name>CustomerServiceBean</ejb-name>
+         <jndi-name>ejb/H3T/CustomerService</jndi-name>
+      </session>
+      <session>
+         <ejb-name>OrderServiceBean</ejb-name>
+         <jndi-name>ejb/H3T/OrderService</jndi-name>
+      </session>
+      <session>
+         <ejb-name>ProductServiceBean</ejb-name>
+         <jndi-name>ejb/H3T/ProductService</jndi-name>
+      </session>
+   </enterprise-beans>
+</jboss>
