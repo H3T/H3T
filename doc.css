@@ -5,6 +5,9 @@ h1{
 
 h2{
 	font-size: 16;
+	font-family: arial;
+	color: black;
+	border-bottom: solid thin #b0b0b0;
 }
 
 body{
