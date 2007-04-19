@@ -11,6 +11,9 @@ import java.lang.reflect.Method;
 public class SerializableMethod implements Externalizable{
 	
 	private transient Method method;
+
+	public SerializableMethod(){
+	}
 	
 	public SerializableMethod(Method method){
 		this.method = method;
