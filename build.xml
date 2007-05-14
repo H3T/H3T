@@ -18,7 +18,7 @@
 	<property name="hsql.lib" value="${basedir}/lib/hsql"/>
 	<property name="ejb3.lib" value="${basedir}/lib/ejb3"/>
 	<property name="etc.dir" value="${basedir}/src/etc"/>
-	<property name="version" value="0.3.0"/>
+	<property name="version" value="0.3.1"/>
 	
     <path id="classpath">
         <fileset dir="${ejb3.lib}">
