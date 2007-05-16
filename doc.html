@@ -83,12 +83,11 @@ as if it were being done by Hibernate on the server.
 
 <h2>Can I use it?</h2>
 <p>
-H3T hooks into EJB3 entity annotations (e.g., <code>ManyToOne</code>) to intercept
+H3T hooks into JPA entity annotations (e.g., <code>ManyToOne</code>) to intercept
 your attempts to access associated elements. For this reason, you need
-to be using Hibernate 3.0 or above and be using EJB3 annotations. You
-do <i>not</i> need to be using EJB3
-entity beans, just the annotations. Nor do you need to be using JBoss
-Application Server, or any J2EE container for that matter.
+to be using Hibernate 3.0 or above and be using JPA annotations. You
+do <i>not</i> need to be using <code>EntityManager</code>. Nor do you need to be using JBoss
+Application Server, or any Java EE container for that matter.
 </p>
 
 <h2>What are H3T's dependencies?</h2>
