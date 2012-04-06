@@ -3,14 +3,13 @@ package org.h3t.aspect;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
-import net.sf.cglib.proxy.LazyLoader;
-
-import org.apache.log4j.Logger;
 import org.h3t.util.LoadServiceFactoryMap;
 import org.h3t.util.SerializableField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FieldLazyLoader implements LazyLoader, Serializable {
-	private final static Logger log = Logger.getLogger(FieldLazyLoader.class);
+	private final static Logger log = LoggerFactory.getLogger(FieldLazyLoader.class);
 
 	private static final long serialVersionUID = -1783247377346260428L;
 

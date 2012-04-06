@@ -7,7 +7,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.h3t.LoadService;
 import org.h3t.RemoteLoad;
 import org.h3t.util.BeanProperty;
@@ -16,12 +15,11 @@ import org.h3t.util.LoadServiceFactoryMap;
 import org.h3t.util.Property;
 import org.h3t.util.SerializableField;
 import org.h3t.util.SerializableMethod;
-import org.hibernate.collection.PersistentCollection;
-import org.jboss.aop.joinpoint.FieldReadInvocation;
-import org.jboss.aop.joinpoint.MethodInvocation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class CollectionAspect implements LazyAspect {
-	private static final Logger log = Logger.getLogger(CollectionAspect.class);
+	private static final Logger log = LoggerFactory.getLogger(CollectionAspect.class);
 
 	public Object proxyField(FieldReadInvocation invocation) throws Throwable {
 		Field field = invocation.getField();

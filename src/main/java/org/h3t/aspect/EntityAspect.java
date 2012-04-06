@@ -3,18 +3,15 @@ package org.h3t.aspect;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import net.sf.cglib.proxy.Callback;
-import net.sf.cglib.proxy.Enhancer;
+import javax.security.auth.callback.Callback;
 
-import org.apache.log4j.Logger;
 import org.h3t.util.BeanProperty;
-import org.hibernate.proxy.HibernateProxy;
-import org.jboss.aop.joinpoint.FieldReadInvocation;
-import org.jboss.aop.joinpoint.MethodInvocation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class EntityAspect implements LazyAspect{
 	
-	private final static Logger log = Logger.getLogger(EntityAspect.class);
+	private final static Logger log = LoggerFactory.getLogger(EntityAspect.class);
 	
 	public Object invoke(FieldReadInvocation invocation) throws Throwable {
 		Field field = invocation.getField();

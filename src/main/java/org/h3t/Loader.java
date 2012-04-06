@@ -4,12 +4,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.h3t.util.BeanProperty;
 import org.h3t.util.FieldProperty;
 import org.h3t.util.Property;
-import org.hibernate.Session;
-import org.hibernate.proxy.HibernateProxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is a utility class that can be used by your implementation of
@@ -20,7 +19,7 @@ import org.hibernate.proxy.HibernateProxy;
  */
 public class Loader {
 	
-	private static final Logger log = Logger.getLogger(Loader.class);
+	private static final Logger log = LoggerFactory.getLogger(Loader.class);
 
 	private Loader() {
 	}
