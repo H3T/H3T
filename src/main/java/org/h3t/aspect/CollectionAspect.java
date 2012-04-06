@@ -15,6 +15,7 @@ import org.h3t.util.LoadServiceFactoryMap;
 import org.h3t.util.Property;
 import org.h3t.util.SerializableField;
 import org.h3t.util.SerializableMethod;
+import org.hibernate.collection.spi.PersistentCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,15 +24,14 @@ public abstract class CollectionAspect implements LazyAspect {
 
 	public Object proxyField(FieldReadInvocation invocation) throws Throwable {
 		Field field = invocation.getField();
-		log.debug("Intercepting read of " + field);
+		log.debug("Intercepting read of {}", field);
 		Object entity = invocation.getTargetObject();
 		Object ret = invocation.invokeNext();
 		if (ret instanceof PersistentCollection && isLazy(field)) {
-			log.debug("Found lazy collection for " + field);
+			log.debug("Found lazy collection for {}", field);
 			PersistentCollection collection = (PersistentCollection) ret;
 			if (!collection.wasInitialized()) {
-				log.debug("Collection not initialized. Creating proxy for "
-						+ field);
+				log.debug("Collection not initialized. Creating proxy for {}", field);
 				ret = newProxyInstance(field.getType(), fieldHandler(entity,
 						field, collection));
 			}
@@ -41,15 +41,14 @@ public abstract class CollectionAspect implements LazyAspect {
 
 	public Object proxyProperty(MethodInvocation invocation) throws Throwable {
 		Method method = invocation.getMethod();
-		log.debug("Intercepting invocation of " + method);
+		log.debug("Intercepting invocation of {}", method);
 		Object entity = invocation.getTargetObject();
 		Object ret = invocation.invokeNext();
 		if (ret instanceof PersistentCollection && isLazy(method)) {
-			log.debug("Found lazy collection for " + method);
+			log.debug("Found lazy collection for {}", method);
 			PersistentCollection collection = (PersistentCollection) ret;
 			if (!collection.wasInitialized()) {
-				log.debug("Collection not initialized. Creating proxy for "
-						+ method);
+				log.debug("Collection not initialized. Creating proxy for {}", method);
 				ret = newProxyInstance(method.getReturnType(), propertyHandler(
 						entity, method, collection));
 			}
@@ -69,7 +68,7 @@ public abstract class CollectionAspect implements LazyAspect {
 			@Override
 			Collection load(LoadService service)
 					throws InvocationTargetException {
-				log.debug("Loading collection in " + field);
+				log.debug("Loading collection in {}", field);
 				return service.loadAssociatedCollection(entity,
 						new SerializableField(field));
 			}
@@ -83,7 +82,7 @@ public abstract class CollectionAspect implements LazyAspect {
 			@Override
 			Collection load(LoadService service)
 					throws InvocationTargetException {
-				log.debug("Loading collection in " + properyGetter);
+				log.debug("Loading collection in {}", properyGetter);
 				return service.loadAssociatedCollection(entity,
 						new SerializableMethod(properyGetter));
 			}
@@ -110,8 +109,7 @@ public abstract class CollectionAspect implements LazyAspect {
 			try {
 				if (!collection.wasInitialized()) {
 					log
-							.debug("Collection found not initialized during invocation of "
-									+ method);
+							.debug("Collection found not initialized during invocation of {}", method);
 					collection = (PersistentCollection) load(LoadServiceFactoryMap
 							.getFactory(
 									property.getAnnotation(RemoteLoad.class)

@@ -7,6 +7,8 @@ import java.util.Collection;
 import org.h3t.util.BeanProperty;
 import org.h3t.util.FieldProperty;
 import org.h3t.util.Property;
+import org.hibernate.Session;
+import org.hibernate.proxy.HibernateProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +39,7 @@ public class Loader {
 	 */
 	public static Collection loadAssociatedCollection(Session session,
 			Object entity, Method method) {
-		log.debug("Loading collection using " + method);
+		log.debug("Loading collection using {}", method);
 		return load(session, entity, new BeanProperty(method),
 				collectionInitializer());
 	}
@@ -55,7 +57,7 @@ public class Loader {
 	 */
 	public static Collection loadAssociatedCollection(Session session,
 			Object entity, Field field) {
-		log.debug("Loading collection using " + field);
+		log.debug("Loading collection using {}", field);
 		return load(session, entity, new FieldProperty(field),
 				collectionInitializer());
 	}
@@ -73,7 +75,7 @@ public class Loader {
 	 */
 	public static Object loadAssociatedEntity(Session session, Object entity,
 			Method method)  {
-		log.debug("Loading entity using " + method);
+		log.debug("Loading entity using {}", method);
 		return load(session, entity, new BeanProperty(method),
 				entityInitializer());
 	}
@@ -91,7 +93,7 @@ public class Loader {
 	 */
 	public static Object loadAssociatedEntity(Session session, Object entity,
 			Field field)  {
-		log.debug("Loading entity using " + field);
+		log.debug("Loading entity using {}", field);
 		return load(session, entity, new FieldProperty(field),
 				entityInitializer());
 	}

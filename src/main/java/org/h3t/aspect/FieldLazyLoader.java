@@ -3,6 +3,8 @@ package org.h3t.aspect;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
+import net.sf.cglib.proxy.LazyLoader;
+
 import org.h3t.util.LoadServiceFactoryMap;
 import org.h3t.util.SerializableField;
 import org.slf4j.Logger;
@@ -23,7 +25,7 @@ public class FieldLazyLoader implements LazyLoader, Serializable {
 	}
 
 	public Object loadObject() throws Exception {
-		log.debug("Loading entity for " + field);
+		log.debug("Loading entity for {}", field);
 		return LoadServiceFactoryMap.getFactory(field.get()).lookup()
 				.loadAssociatedEntity(parentEntity, field);
 	}
