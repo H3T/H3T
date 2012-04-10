@@ -1,0 +1,8 @@
+<aspectj>
+    <aspects>
+        <aspect name="org.h3t.aspect.ManyToOneAspect"/>
+        <aspect name="org.h3t.aspect.OneToManyAspect"/>
+        <aspect name="org.h3t.aspect.ManyToManyAspect"/>
+        <aspect name="org.h3t.aspect.OneToOneAspect"/>
+    </aspects>
+</aspectj>

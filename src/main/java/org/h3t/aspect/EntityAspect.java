@@ -6,6 +6,9 @@ import java.lang.reflect.Method;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.reflect.FieldSignature;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.h3t.util.BeanProperty;
 import org.hibernate.proxy.HibernateProxy;
 import org.slf4j.Logger;
@@ -15,11 +18,11 @@ public abstract class EntityAspect implements LazyAspect{
 	
 	private final static Logger log = LoggerFactory.getLogger(EntityAspect.class);
 	
-	public Object invoke(FieldReadInvocation invocation) throws Throwable {
-		Field field = invocation.getField();
+	public Object getField(ProceedingJoinPoint joinPoint) throws Throwable {
+		Field field = ((FieldSignature)joinPoint.getSignature()).getField();
 		log.debug("Intercepting read of {}", field);
-		Object parentEntity = invocation.getTargetObject();
-		Object ret = invocation.invokeNext();
+		Object parentEntity = joinPoint.getTarget();
+		Object ret = joinPoint.proceed();
 		if (ret instanceof HibernateProxy && isLazy(field)){
 			log.debug("Found lazy proxy for {}", field);
 			HibernateProxy proxy = (HibernateProxy)ret;
@@ -35,11 +38,11 @@ public abstract class EntityAspect implements LazyAspect{
 	}
 
 
-	public Object invoke(MethodInvocation invocation) throws Throwable {
-		Method method = invocation.getMethod();
+	public Object invokeMethod(ProceedingJoinPoint joinPoint) throws Throwable {
+		Method method = ((MethodSignature)joinPoint.getSignature()).getMethod();
 		log.debug("Intercepting invocation of {}", method);
-		Object parentEntity = invocation.getTargetObject();
-		Object ret = invocation.invokeNext();
+		Object parentEntity = joinPoint.getTarget();
+		Object ret = joinPoint.proceed();
 		if (ret instanceof HibernateProxy && isLazy(method)){
 			log.debug("Found lazy proxy for {}", method);
 			HibernateProxy proxy = (HibernateProxy)ret;

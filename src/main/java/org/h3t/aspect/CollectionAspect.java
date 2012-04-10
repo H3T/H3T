@@ -7,6 +7,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Collection;
 
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.reflect.FieldSignature;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.h3t.LoadService;
 import org.h3t.RemoteLoad;
 import org.h3t.util.BeanProperty;
@@ -22,11 +25,11 @@ import org.slf4j.LoggerFactory;
 public abstract class CollectionAspect implements LazyAspect {
 	private static final Logger log = LoggerFactory.getLogger(CollectionAspect.class);
 
-	public Object proxyField(FieldReadInvocation invocation) throws Throwable {
-		Field field = invocation.getField();
+	public Object proxyField(ProceedingJoinPoint joinPoint) throws Throwable {
+		Field field = ((FieldSignature)joinPoint.getSignature()).getField();
 		log.debug("Intercepting read of {}", field);
-		Object entity = invocation.getTargetObject();
-		Object ret = invocation.invokeNext();
+		Object entity = joinPoint.getTarget();
+		Object ret = joinPoint.proceed();
 		if (ret instanceof PersistentCollection && isLazy(field)) {
 			log.debug("Found lazy collection for {}", field);
 			PersistentCollection collection = (PersistentCollection) ret;
@@ -39,11 +42,11 @@ public abstract class CollectionAspect implements LazyAspect {
 		return ret;
 	}
 
-	public Object proxyProperty(MethodInvocation invocation) throws Throwable {
-		Method method = invocation.getMethod();
+	public Object proxyProperty(ProceedingJoinPoint joinPoint) throws Throwable {
+		Method method = ((MethodSignature)joinPoint.getSignature()).getMethod();
 		log.debug("Intercepting invocation of {}", method);
-		Object entity = invocation.getTargetObject();
-		Object ret = invocation.invokeNext();
+		Object entity = joinPoint.getTarget();
+		Object ret = joinPoint.proceed();
 		if (ret instanceof PersistentCollection && isLazy(method)) {
 			log.debug("Found lazy collection for {}", method);
 			PersistentCollection collection = (PersistentCollection) ret;
