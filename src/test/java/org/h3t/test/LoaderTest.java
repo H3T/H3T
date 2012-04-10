@@ -1,9 +1,11 @@
 package org.h3t.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.util.List;
 
-import junit.framework.TestCase;
-
+import org.h2.Driver;
 import org.h3t.Loader;
 import org.h3t.test.entity.A;
 import org.h3t.test.entity.B;
@@ -12,34 +14,37 @@ import org.hibernate.LazyInitializationException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.AnnotationConfiguration;
-import org.hibernate.dialect.HSQLDialect;
-import org.hsqldb.jdbcDriver;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.dialect.H2Dialect;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-public class LoaderTest extends TestCase {
+public class LoaderTest {
 	private final static String TEST_VALUE = "test value";
 
 
 	private SessionFactory factory;
 
-	protected void setUp() throws Exception {
-		factory = new AnnotationConfiguration()
+	@Before
+	public void setUp() throws Exception {
+		factory = new Configuration()
 			.addAnnotatedClass(A.class)
 			.addAnnotatedClass(B.class)
 			.addAnnotatedClass(C.class)
 			.setProperty("hibernate.show_sql","false")
 			.setProperty("hibernate.jdbc.batch_size", "0")
-			.setProperty("hibernate.connection.driver_class", jdbcDriver.class.getName())
-			.setProperty("hibernate.connection.url", "jdbc:hsqldb:mem:orders")
+			.setProperty("hibernate.connection.driver_class", Driver.class.getName())
+			.setProperty("hibernate.connection.url", "jdbc:h2:mem:orders")
 			.setProperty("hibernate.hbm2ddl.auto", "create-drop")
-			.setProperty("hibernate.dialect", HSQLDialect.class.getName())
+			.setProperty("hibernate.dialect", H2Dialect.class.getName())
 			.buildSessionFactory();
 	}
-
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		factory.close();
 	}
-
+	@Test
 	public void testEntityField() throws Exception {
 		Session session = factory.openSession();
 		Transaction transaction = session.beginTransaction();

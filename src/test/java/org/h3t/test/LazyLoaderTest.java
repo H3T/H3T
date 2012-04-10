@@ -1,6 +1,6 @@
 package org.h3t.test;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 import net.sf.cglib.proxy.LazyLoader;
 
 import org.h3t.aspect.FieldLazyLoader;
@@ -9,19 +9,18 @@ import org.h3t.test.entity.FieldAccessEntity;
 import org.h3t.test.entity.MethodAccessEntity;
 import org.h3t.test.entity.RelatedEntity;
 import org.h3t.test.util.TestLoadServiceFactory;
+import org.junit.After;
 
-public class LazyLoaderTest extends TestCase  {
+public class LazyLoaderTest  {
 
 	private final static String MT = "methodTest";
 
 	private final static String FT = "fieldTest";
 
-	@Override
-	protected void setUp() throws Exception {
-	}
 
-	@Override
-	protected void tearDown() throws Exception {
+
+	@After
+	public void tearDown() throws Exception {
 		TestLoadServiceFactory.clearQueue();
 	}
 

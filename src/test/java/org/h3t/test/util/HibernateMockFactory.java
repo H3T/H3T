@@ -11,8 +11,8 @@ import net.sf.cglib.proxy.MethodProxy;
 import net.sf.cglib.proxy.NoOp;
 
 import org.hibernate.HibernateException;
-import org.hibernate.collection.PersistentCollection;
-import org.hibernate.engine.SessionImplementor;
+import org.hibernate.collection.spi.PersistentCollection;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 
@@ -108,13 +108,27 @@ public class HibernateMockFactory {
 			}
 
 			public void setUnwrap(boolean arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 
 			public boolean isUnwrap() {
-				// TODO Auto-generated method stub
 				return false;
+			}
+
+			public boolean isReadOnlySettingAvailable() {
+				return false;
+			}
+
+			public boolean isReadOnly() {
+				return false;
+			}
+
+			public void setReadOnly(boolean readOnly) {
+				
+			}
+
+			public void unsetSession() {
+				
 			}
 		};
 	}

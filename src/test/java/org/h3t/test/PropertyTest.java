@@ -1,20 +1,12 @@
 package org.h3t.test;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertTrue;
 
 import org.h3t.util.BeanProperty;
 import org.h3t.util.FieldProperty;
 import org.h3t.util.Property;
 
-public class PropertyTest extends TestCase {
-
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
-
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
+public class PropertyTest {
 	
 	public void testBeanByName() throws Exception {
 		testProperty(new BeanProperty<String>("theProperty", TestObject.class));

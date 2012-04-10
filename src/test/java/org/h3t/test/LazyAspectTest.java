@@ -1,6 +1,7 @@
 package org.h3t.test;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.h3t.aspect.ManyToManyAspect;
 import org.h3t.aspect.ManyToOneAspect;
@@ -8,9 +9,11 @@ import org.h3t.aspect.OneToManyAspect;
 import org.h3t.aspect.OneToOneAspect;
 import org.h3t.test.entity.FieldAccessEntity;
 import org.h3t.test.entity.MethodAccessEntity;
+import org.junit.Test;
 
-public class LazyAspectTest extends TestCase {
+public class LazyAspectTest  {
 	
+	@Test
 	public void testLazy() throws Exception{
 		 assertTrue(new OneToOneAspect().isLazy(FieldAccessEntity.class.getField("oneToOneLazy")));
 		 assertTrue(new ManyToOneAspect().isLazy(FieldAccessEntity.class.getField("manyToOneLazy")));
@@ -22,6 +25,7 @@ public class LazyAspectTest extends TestCase {
 		 assertTrue(new ManyToManyAspect().isLazy(MethodAccessEntity.class.getMethod("getManyToManyLazy")));
 	}
 	
+	@Test
 	public void testEager() throws Exception{
 		 assertFalse(new OneToOneAspect().isLazy(FieldAccessEntity.class.getField("oneToOneEager")));
 		 assertFalse(new ManyToOneAspect().isLazy(FieldAccessEntity.class.getField("manyToOneEager")));
