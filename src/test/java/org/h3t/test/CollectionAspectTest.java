@@ -1,5 +1,6 @@
 package org.h3t.test;
 
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -23,6 +24,8 @@ import org.h3t.test.util.TestLoadServiceFactory;
 import org.h3t.util.BeanProperty;
 import org.junit.After;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 public class CollectionAspectTest {
 
 
@@ -60,49 +63,63 @@ public class CollectionAspectTest {
 	private void testField(CollectionAspect aspect, Field field,
 			ChildState state) throws Throwable {
 		boolean initialized = !state.equals(ChildState.LAZY_UNINITIALIZED);
-		List loadedResult = HibernateMockFactory.newPersistentCollection(
-				LinkedList.class, true);
+		List loadedResult = HibernateMockFactory.newPersistentCollection(LinkedList.class, true);
 		TestLoadServiceFactory.queueResult(loadedResult);
 		FieldAccessEntity entity = new FieldAccessEntity();
-		Collection originalValue = HibernateMockFactory
-				.newPersistentCollection(LinkedList.class, initialized);
+		Collection originalValue = HibernateMockFactory.newPersistentCollection(LinkedList.class, initialized);
 		field.set(entity, originalValue);
 		ProceedingJoinPoint joinPoint = mock(ProceedingJoinPoint.class);
 		FieldSignature signature = mock(FieldSignature.class);
 		when(signature.getField()).thenReturn(field);
 		when(joinPoint.getSignature()).thenReturn(signature);
 		when(joinPoint.getTarget()).thenReturn(entity);
-		when(joinPoint.proceed()).thenReturn(originalValue);
-		((Collection) aspect.proxyField(joinPoint)).iterator();
+		when(joinPoint.proceed()).thenAnswer(fieldValueAnswer(field, entity));
+		Collection.class.cast(aspect.proxyField(joinPoint)).iterator();
 		if (initialized) {
-			assertTrue(originalValue == aspect.proxyField(joinPoint));
+			assertSame(originalValue, aspect.proxyField(joinPoint));
 		} else {
-			assertTrue(loadedResult == aspect.proxyField(joinPoint));
+			assertSame(loadedResult, aspect.proxyField(joinPoint));
 		}
 	}
-
+	
 	private void testMethod(CollectionAspect aspect, Method method,
 			ChildState state) throws Throwable {
 		boolean initialized = !state.equals(ChildState.LAZY_UNINITIALIZED);
-		List loadedResult = HibernateMockFactory.newPersistentCollection(
-				LinkedList.class, true);
+		List loadedResult = HibernateMockFactory.newPersistentCollection(LinkedList.class, true);
 		TestLoadServiceFactory.queueResult(loadedResult);
 		MethodAccessEntity entity = new MethodAccessEntity();
-		Collection originalValue = HibernateMockFactory
-				.newPersistentCollection(LinkedList.class, initialized);
+		Collection originalValue = HibernateMockFactory.newPersistentCollection(LinkedList.class, initialized);
 		new BeanProperty<Collection>(method).set(entity, originalValue);
 		ProceedingJoinPoint joinPoint = mock(ProceedingJoinPoint.class);
 		MethodSignature signature = mock(MethodSignature.class);
 		when(signature.getMethod()).thenReturn(method);
 		when(joinPoint.getSignature()).thenReturn(signature);
 		when(joinPoint.getTarget()).thenReturn(entity);
-		when(joinPoint.proceed()).thenReturn(originalValue);
-		((Collection) aspect.proxyProperty(joinPoint)).iterator();
+		when(joinPoint.proceed()).thenAnswer(methodResponseAnswer(method, entity));
+		Collection.class.cast(aspect.proxyProperty(joinPoint)).iterator();
 		if (initialized) {
 			assertTrue(originalValue == aspect.proxyProperty(joinPoint));
 		} else {
 			assertTrue(loadedResult == aspect.proxyProperty(joinPoint));
 		}
+	}
+	
+	private static Answer<Collection> fieldValueAnswer(final Field field, final FieldAccessEntity entity){
+		return new Answer<Collection>() {
+
+			public Collection answer(InvocationOnMock invocation) throws Throwable {
+				return (Collection) field.get(entity);
+			}
+		};
+	}
+	
+	private static Answer<Collection> methodResponseAnswer(final Method method, final MethodAccessEntity entity){
+		return new Answer<Collection>() {
+
+			public Collection answer(InvocationOnMock invocation) throws Throwable {
+				return (Collection) method.invoke(entity);
+			}
+		};
 	}
 
 }
