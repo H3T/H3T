@@ -5,7 +5,6 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import org.h2.Driver;
 import org.h3t.Loader;
 import org.h3t.test.entity.A;
 import org.h3t.test.entity.B;
@@ -34,7 +33,7 @@ public class LoaderTest {
 			.addAnnotatedClass(C.class)
 			.setProperty("hibernate.show_sql","false")
 			.setProperty("hibernate.jdbc.batch_size", "0")
-			.setProperty("hibernate.connection.driver_class", Driver.class.getName())
+			.setProperty("hibernate.connection.driver_class", "org.h2.Driver")
 			.setProperty("hibernate.connection.url", "jdbc:h2:mem:orders")
 			.setProperty("hibernate.hbm2ddl.auto", "create-drop")
 			.setProperty("hibernate.dialect", H2Dialect.class.getName())
