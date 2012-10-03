@@ -1,4 +1,7 @@
 apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
 
 group = 'h3t'
 version = '1.0.0-SNAPSHOT'
